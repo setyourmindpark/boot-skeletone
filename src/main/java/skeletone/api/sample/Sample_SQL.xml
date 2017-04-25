@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="skeletone.SampleMapper">
+    
+	<select id="getNow" resultType="queryMap">
+		SELECT 
+			NOW() AS NOW
+		FROM DUAL
+	</select>
+	
+	
+	<insert id="insert1">
+		INSERT INTO sample
+		VALUES(
+			null,
+			'aa',
+			'bb',
+			'cc',
+			'dd',
+			'ee'
+		)
+	</insert>
+	
+	<insert id="insert2">
+		INSERT INTO sample
+		VALUES(
+			1,
+			'22aa',
+			'22bb',
+			'22cc',
+			'22dd',
+			'22ee'
+		)
+	</insert>
+	
+	<!-- pagenation sample -->	
+	<!-- 
+	<select id="getBoardArticles" parameterType="hashmap" resultType="queryMap">
+		<include refid="common.pagingPre"/> 
+		SELECT 
+			B.*
+		    , @RNUM := @RNUM+1 AS NO
+		FROM (
+			SELECT 
+				A.*
+				, @RNUM := 0 
+			FROM (
+				SELECT *
+				FROM T_ARTICLE				
+			)A
+			WHERE BOARD_NO = #{boardNo} AND USE_YN = 'Y' 
+			<include refid="articles_where_conditions"/> 
+		    ORDER BY CRTE_DT ASC
+		)B
+		ORDER BY NO DESC
+		<include refid="common.pagingPost"/> 
+	</select> -->
+	
+	
+	<!-- paramterType으로 VO를 받고있으므로, selectKey는 parameterType으로 받은 VO의 fileNo 프로퍼티에 자동으로 바인딩됨 -->
+	<!-- 
+	<insert id="insertAttachedFile" parameterType="skeletone.attach.AttachedFileVO">
+		<![CDATA[
+			INSERT INTO T_ATTACH_FILE ( FILE_NO, PHSICAL_DIR, SERVER_SUB_PATH, VIEW_FILENAME, PHSICAL_FILENAME, USE_YN)
+			VALUES (NULL, #{phsicalDir}, #{serverSubPath}, #{viewFileName}, #{phsicalFileName}, 'Y')
+		]]>
+		<selectKey keyProperty="fileNo" resultType="_int" order="AFTER">
+        	SELECT LAST_INSERT_ID()
+    	</selectKey>
+	</insert> -->
+	
+	
+	<!-- hashmap으로 파라미터를 받을경우에는 selectKey를 자동으로 map 에 반인딩시킴. parameter 로 넘어온타입에따라서 자동으로 mybatis가 select key를 바인딩해줌 --> 
+	<!--
+	<insert id="addReport" parameterType="hashmap">
+		INSERT INTO T_REPORT (
+			RP_NO
+			, RP_TYPE
+			, CRTE_DT
+			, MOD_DT
+			,COMMENT
+		) VALUES (
+			NULL
+			,#{rpType}
+			, NOW()
+			, NOW()
+			, #{comment}
+		)
+		<selectKey keyProperty="rpNo" resultType="_int" order="AFTER">
+        	SELECT LAST_INSERT_ID()
+    	</selectKey>
+	</insert> -->
+</mapper>
